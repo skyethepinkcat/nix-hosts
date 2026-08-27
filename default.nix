@@ -1,11 +1,14 @@
 {
   local_domain ? "local", # Kept as "local" to avoid leaking tailnet
-  pkgs ? <nixpkgs>,
+  lib ? <nixpkgs>.lib,
 }:
 let
-  inherit (pkgs) lib;
-  inherit (builtins) elem;
-  inherit (lib) filterAttrs mapAttrsToList lists;
+  inherit lib;
+  inherit (builtins) elem attrValues;
+  inherit (lib)
+    lists
+    toList
+    ;
 
   # Checks if the given subset is a subset of list
   subset =
@@ -19,20 +22,33 @@ let
       name,
       system,
       hardware ? null,
+      fqdn ? "${name}.${local_domain}",
       extraFQDNs ? [ ],
       tags ? [ ],
       primaryUser ? "skye",
     }:
-    {
+    let
+      input_tags = tags;
+    in
+    rec {
       inherit
         name
         system
         primaryUser
+        fqdn
         hardware
         ;
       # Add system as a tag
-      tags = [ system ] ++ tags;
-      fqdn = [ "${name}.${local_domain}" ] ++ extraFQDNs;
+      tags = [ system ] ++ input_tags;
+      fqdns = [ "${name}.${local_domain}" ] ++ extraFQDNs;
+      hasTags = i_tags: (subset (toList i_tags) tags);
+      # Helper functions to determine OS
+      inherit (lib.systems.elaborate system)
+        isDarwin
+        isLinux
+        isx86
+        isAarch
+        ;
     };
 in
 rec {
@@ -75,7 +91,7 @@ rec {
       ];
     };
   };
-  withTags = tags: (filterAttrs (_: host: subset tags host.tags) hosts);
+  withTags = tags: ((host: subset tags host.tags) (attrValues hosts));
   hostHasTag = host: tag: (elem tag hosts.${host}.tags);
   hostHasTags = host: tag: (subset hosts.${host}.tags tag);
 }
