@@ -42,6 +42,7 @@ let
       tags = [ system ] ++ input_tags;
       fqdns = [ "${name}.${local_domain}" ] ++ extraFQDNs;
       hasTags = i_tags: (subset (toList i_tags) tags);
+      hasTag = throw "You probably meant 'hasTags'";
       # Helper functions to determine OS
       inherit (lib.systems.elaborate system)
         isDarwin
