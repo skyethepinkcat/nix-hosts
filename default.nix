@@ -54,6 +54,7 @@ in
 rec {
   hosts = {
     asticassia = mkHost {
+      name = "asticassia";
       primaryUser = "skye";
       extraFQDNs = [
         "skyenet.online"
@@ -67,6 +68,7 @@ rec {
       ];
     };
     honnoji = mkHost {
+      name = "honnoji";
       primaryUser = "skye";
       system = "x86_64-linux";
       tags = [
@@ -76,6 +78,7 @@ rec {
       ];
     };
     lydian = mkHost {
+      name = "lydian";
       primaryUser = "skye";
       system = "aarch64-darwin";
       tags = [
@@ -83,6 +86,7 @@ rec {
       ];
     };
     yubiwa = mkHost {
+      name = "yubiwa";
       primaryUser = "ii69854";
       system = "aarch64-darwin";
       tags = [
