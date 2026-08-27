@@ -39,7 +39,7 @@ let
         hardware
         ;
       # Add system as a tag
-      tags = [ system ] ++ input_tags;
+      tags = [ (toString system) ] ++ input_tags;
       fqdns = [ "${name}.${local_domain}" ] ++ extraFQDNs;
       hasTags = i_tags: (subset (toList i_tags) tags);
       hasTag = throw "You probably meant 'hasTags'";
@@ -96,7 +96,7 @@ rec {
       ];
     };
   };
-  withTags = tags: ((host: subset tags host.tags) (attrValues hosts));
+  withTags = tags: (builtins.filter (host: host.hasTags tags) (attrValues hosts));
   hostHasTag = host: tag: (elem tag hosts.${host}.tags);
   hostHasTags = host: tag: (subset hosts.${host}.tags tag);
 }
