@@ -76,8 +76,8 @@ rec {
         "public"
       ];
       exporters = [
-        "sonarr"
-        "radarr"
+        "exportarr-sonarr"
+        "exportarr-radarr"
         "nginx"
       ];
     };
