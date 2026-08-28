@@ -26,9 +26,11 @@ let
       extraFQDNs ? [ ],
       tags ? [ ],
       primaryUser ? "skye",
+      exporters ? [ ],
     }:
     let
       input_tags = tags;
+      input_exporters = exporters;
     in
     rec {
       inherit
@@ -38,10 +40,15 @@ let
         fqdn
         hardware
         ;
+      exporters = input_exporters ++ [
+        "node"
+        "tailscale"
+      ];
       # Add system as a tag
-      tags = [ (toString system) ] ++ input_tags;
+      tags = [ (toString system) ] ++ input_tags ++ (map (v: "exporter-${v}") exporters);
       fqdns = [ "${name}.${local_domain}" ] ++ extraFQDNs;
       hasTags = i_tags: (subset (toList i_tags) tags);
+      hasExporters = i: (subset (toList i) exporters);
       hasTag = throw "You probably meant 'hasTags'";
       # Helper functions to determine OS
       inherit (lib.systems.elaborate system)
@@ -53,6 +60,7 @@ let
     };
 in
 rec {
+
   hosts = {
     asticassia = mkHost {
       name = "asticassia";
@@ -67,6 +75,11 @@ rec {
         "low power"
         "public"
       ];
+      exporters = [
+        "sonarr"
+        "radarr"
+        "nginx"
+      ];
     };
     honnoji = mkHost {
       name = "honnoji";
@@ -76,6 +89,10 @@ rec {
         "server"
         "monitoring"
         "builder"
+        "podman"
+      ];
+      exporters = [
+        "zfs"
       ];
     };
     lydian = mkHost {
