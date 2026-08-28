@@ -40,7 +40,7 @@ let
         fqdn
         hardware
         ;
-      exporters = input_exporters ++ [
+      exporters = input_exporters ++ lib.optionals (subset ["server"] input_tags) [
         "node"
         "tailscale"
       ];
