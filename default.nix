@@ -76,8 +76,6 @@ rec {
         "public"
       ];
       exporters = [
-        "exportarr-sonarr"
-        "exportarr-radarr"
         "nginx"
       ];
     };
@@ -93,6 +91,8 @@ rec {
       ];
       exporters = [
         "zfs"
+        "exportarr-sonarr"
+        "exportarr-radarr"
       ];
     };
     lydian = mkHost {
