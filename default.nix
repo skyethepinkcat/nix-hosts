@@ -69,6 +69,15 @@ rec {
         "public"
       ];
     };
+    souya = mkHost {
+      name = "souya";
+      primaryUser = "skye";
+      system = "x86_64-linux";
+      tags = [
+        "server"
+        "low power"
+      ];
+    };
     honnoji = mkHost {
       name = "honnoji";
       primaryUser = "skye";
