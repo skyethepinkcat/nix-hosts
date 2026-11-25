@@ -89,6 +89,15 @@ rec {
         "podman"
       ];
     };
+    misaki = mkHost {
+      name = "misaki";
+      primaryUser = "skye";
+      system = "x86_64-linux";
+      tags = [
+        "desktop"
+        "plasma"
+      ];
+    };
     lydian = mkHost {
       name = "lydian";
       primaryUser = "skye";
